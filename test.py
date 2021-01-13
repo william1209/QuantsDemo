@@ -217,7 +217,7 @@ def main():
         data_init(150,504)
         ad_pycaret()
     elif app_mode == "Anomaly Detection(DL)":
-        data_init(252,756)
+        data_init(252,1000)
         ad_dl()
 
 
@@ -341,18 +341,29 @@ def login_process():
 
 ###DEEPANT AD
 MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
-#LOOKBACK_SIZE = 30
-#THRESHOLD = 0.55
-#EPOCH = 1000
 
 def ad_dl():
     global target, daypara, df, df2, df_4pycaret, df_temp
-    LOOKBACK_SIZE = st.sidebar.slider("Rolling Window Size",30,60)
+    LOOKBACK_SIZE = 30
+    #LOOKBACK_SIZE = st.sidebar.slider("Rolling Window Size",30,60)
     THRESHOLD = st.sidebar.slider("Threshold",0.55,0.8)
-    EPOCH = st.sidebar.slider("Epoch",200,1000)
+    #Loading saved model
+    #PATH = "C:\\Users\dev\QuantsDemo\pretrained.pth"
+    PATH = "pretrained_TWII.pth"
+    model = DeepAnT(LOOKBACK_SIZE, 4)
+    optimizer = torch.optim.Adam(list(model.parameters()), lr=1e-5)
+    #model dict
+    checkpoint = torch.load(PATH, map_location=torch.device('cpu'))
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epoch = checkpoint['epoch']
+    loss = checkpoint['loss']
+    #model inference
     data, _data = read_modulate_data(df_temp)
     X,Y,T = data_pre_processing(df_temp,LOOKBACK_SIZE)
-    loss = compute(X,Y,LOOKBACK_SIZE,EPOCH)
+    hypothesis = model(torch.tensor(X.astype(np.float32))).detach().numpy()
+    loss = np.linalg.norm(hypothesis - Y, axis=1)
+    loss.reshape(len(loss),1)
     outlier_cnn, loss_df= threshold_ctrl(THRESHOLD, loss, T)
     #st.write(loss_df)
     st.write(loss_df.style.apply(highlight_out, col = ["anomaly"], axis=1))
