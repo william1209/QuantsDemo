@@ -1,5 +1,5 @@
 # QuantsDemo
-## Strategy CIdea:
+## Strategy Core Idea:
 * Portfolio 組建:  
 不同時期追求不一樣的目標, 假如現在在一趨勢上, 那得貪. 若在一動盪盤上, 那追求的是安穩且與大盤越無關越好  
   
