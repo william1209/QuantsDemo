@@ -556,7 +556,7 @@ def threshold_ctrl(threshold, loss, T):
 
 ###
 
-#if __name__ == "__main__":
-login_process()
-if check:
+if __name__ == "__main__":
+#login_process()
+#if check:
     main()
