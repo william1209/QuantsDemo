@@ -198,14 +198,14 @@ def main():
     global target, daypara, df, df2, df_4pycaret, df_temp
     st.sidebar.title("What to do")
     app_mode = st.sidebar.selectbox("Choose the app mode",
-        ["Data Browse","Feature Engineering","Clustering","Time Pattern","Anomaly Detection(Algo)","Anomaly Detection(DL)"])
+        ["Data Browse","Clustering","Time Pattern","Anomaly Detection(Algo)","Anomaly Detection(DL)"])
     if app_mode == "Data Browse":
         st.title("Welcome")
         data_init(30,504)
         data_browse()
-    elif app_mode == "Feature Engineering":
-        data_init(30,504)
-        feature_engineer()
+    #elif app_mode == "Feature Engineering":
+    #    data_init(30,504)
+    #    feature_engineer()
     elif app_mode == "Clustering":
         st.title("Cluster to Find Support/Pressure")
         data_init(60,504)
